@@ -1,0 +1,7 @@
+{% for i in 0..nb_servant %}
+	{% if servant[i].extraAssets.faces.ascension.1 is defined %}
+		<img src="{{servant[i]['extraAssets']['faces']['ascension']['1']}}"/>
+        {% else %}
+        <img src="{{servant[i]['extraAssets']['faces']['ascension']['0']}}"/>
+	{% endif %}
+{% endfor %}
