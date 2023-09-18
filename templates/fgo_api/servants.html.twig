@@ -1,0 +1,37 @@
+<link href="{{ asset('css/style.css') }}" rel="stylesheet"/>
+<h1>{{classe |capitalize}}</h1>
+<table>
+	<thead>
+		<tr>
+			<th>
+				Name
+			</th>
+			<th>
+				Picture
+			</th>
+			<th>
+				Rarity
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for i in 0..nb_servant %}
+			<tr>
+				<td>
+					{{servant[i].originalName}}
+				</td>
+				{% if servant[i].extraAssets.faces.ascension.1 is defined %}
+					<td><a href='/fgo/servant/{{servant[i]['name']|replace({' ':'_'})}}' ><img src="{{servant[i]['extraAssets']['faces']['ascension']['1']}}"/></a></td>
+				{% else %}
+					<td><a href='/fgo/servant/{{servant[i]['name']|replace({' ':'_'})}}' ><img src="{{servant[i]['extraAssets']['faces']['ascension']['0']}}"/></a></td>
+				{% endif %}
+				<td>
+					{% for j in 1..servant[i].rarity %}
+						★
+					{% endfor %}
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{# {{Id}} #}

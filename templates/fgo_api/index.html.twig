@@ -1,7 +1,24 @@
-{% for i in 0..nb_servant %}
-	{% if servant[i].extraAssets.faces.ascension.1 is defined %}
-		<img src="{{servant[i]['extraAssets']['faces']['ascension']['1']}}"/>
-        {% else %}
-        <img src="{{servant[i]['extraAssets']['faces']['ascension']['0']}}"/>
-	{% endif %}
-{% endfor %}
+<link href="{{ asset('css/style.css') }}" rel="stylesheet"/>
+{# <table>
+	<thead>
+		<tr>
+			<th> Nom </th>
+			<th> Classe </th>
+			<th> Image </th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for i in 0..nb_servant %}
+		<tr>
+			<td> {{servant[i].originalName}} </td>
+			<td> {{servant[i].className |capitalize}} </td>
+			{% if servant[i].extraAssets.faces.ascension.1 is defined %}
+				<td><img src="{{servant[i]['extraAssets']['faces']['ascension']['1']}}"/></td>
+				{% else %}
+				<td><img src="{{servant[i]['extraAssets']['faces']['ascension']['0']}}"/></td>
+			{% endif %}
+		</tr>
+		{% endfor %}
+	</tbody>
+</table> #}
+{{form(form)}}
