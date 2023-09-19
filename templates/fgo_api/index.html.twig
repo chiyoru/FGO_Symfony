@@ -1,24 +1,82 @@
 <link href="{{ asset('css/style.css') }}" rel="stylesheet"/>
-{# <table>
-	<thead>
-		<tr>
-			<th> Nom </th>
-			<th> Classe </th>
-			<th> Image </th>
-		</tr>
-	</thead>
+<h1>
+	Welcome!
+</h1>
+<table id="classList">
 	<tbody>
-		{% for i in 0..nb_servant %}
 		<tr>
-			<td> {{servant[i].originalName}} </td>
-			<td> {{servant[i].className |capitalize}} </td>
-			{% if servant[i].extraAssets.faces.ascension.1 is defined %}
-				<td><img src="{{servant[i]['extraAssets']['faces']['ascension']['1']}}"/></td>
-				{% else %}
-				<td><img src="{{servant[i]['extraAssets']['faces']['ascension']['0']}}"/></td>
-			{% endif %}
+			<td>
+				<a href='/fgo/saber'><img src="{{asset('images/Class-Saber-Gold.png')}}"/></a>
+				<br>
+				Saber
+			</td>
+			<td>
+				<a href='/fgo/archer'><img src="{{asset('images/Class-Archer-Gold.png')}}"/></a>
+				<br>
+				Archer
+			</td>
+			<td>
+				<a href='/fgo/lancer'><img src="{{asset('images/Class-Lancer-Gold.png')}}"/></a>
+				<br>
+				Lancer
+			</td>
+			<td>
+				<a href='/fgo/rider'><img src="{{asset('images/Class-Rider-Gold.png')}}"/></a>
+				<br>
+				Rider
+			</td>
+			<td>
+				<a href='/fgo/caster'><img src="{{asset('images/Class-Caster-Gold.png')}}"/></a>
+				<br>
+				Caster
+			</td>
+			<td>
+				<a href='/fgo/assassin'><img src="{{asset('images/Class-Assassin-Gold.png')}}"/></a>
+				<br>
+				Assassin
+			</td>
+			<td>
+				<a href='/fgo/berserker'><img src="{{asset('images/Class-Berserker-Gold.png')}}"/></a>
+				<br>
+				Berserker
+			</td>
 		</tr>
-		{% endfor %}
+		<tr>
+			<td>
+				<a href='/fgo/ruler'><img src="{{asset('images/Class-Ruler-Gold.png')}}"/></a>
+				<br>
+				Ruler
+			</td>
+			<td>
+				<a href='/fgo/avenger'><img src="{{asset('images/Class-Avenger-Gold.png')}}"/></a>
+				<br>
+				Avenger
+			</td>
+			<td>
+				<a href='/fgo/moonCancer'><img src="{{asset('images/Class-MoonCancer-Gold.png')}}"/></a>
+				<br>
+				Moon Cancer
+			</td>
+			<td>
+				<a href='/fgo/alterEgo'><img src="{{asset('images/Class-AlterEgo-Gold.png')}}"/></a>
+				<br>
+				Alter Ego
+			</td>
+			<td>
+				<a href='/fgo/foreigner'><img src="{{asset('images/Class-Foreigner-Gold.png')}}"/></a>
+				<br>
+				Foreigner
+			</td>
+			<td>
+				<a href='/fgo/pretender'><img src="{{asset('images/Class-Pretender-Gold.png')}}"/></a>
+				<br>
+				Pretender
+			</td>
+			<td>
+				<a href='/fgo/shielder'><img src="{{asset('images/Class-Shielder-Gold.png')}}"/></a>
+				<br>
+				Shielder
+			</td>
+		</tr>
 	</tbody>
-</table> #}
-{{form(form)}}
+</table>

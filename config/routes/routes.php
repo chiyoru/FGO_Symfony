@@ -4,9 +4,9 @@ use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 return function (RoutingConfigurator $routes): void {
     $routes->add('index', '/fgo/index')
-        ->controller([FgoApiController::class, 'fetchFgoDB']);
+        ->controller([FgoApiController::class, 'index']);
 
-    $routes->add('servants', '/fgo/servants')
+    $routes->add('servants', '/fgo/{classe}')
     ->controller([FgoApiController::class, 'servantList']);
 
     $routes->add('servant', '/fgo/servant/{id}')

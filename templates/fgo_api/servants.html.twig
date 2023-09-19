@@ -1,6 +1,6 @@
 <link href="{{ asset('css/style.css') }}" rel="stylesheet"/>
 <h1>{{classe |capitalize}}</h1>
-<table>
+{# <table id='servantList'>
 	<thead>
 		<tr>
 			<th>
@@ -21,9 +21,9 @@
 					{{servant[i].originalName}}
 				</td>
 				{% if servant[i].extraAssets.faces.ascension.1 is defined %}
-					<td><a href='/fgo/servant/{{servant[i]['name']|replace({' ':'_'})}}' ><img src="{{servant[i]['extraAssets']['faces']['ascension']['1']}}"/></a></td>
+					<td class='servantPic'><a href='/fgo/servant/{{servant[i]['name']|replace({' ':'_'})}}' ><img src="{{servant[i]['extraAssets']['charaGraph']['ascension']['1']}}"/></a></td>
 				{% else %}
-					<td><a href='/fgo/servant/{{servant[i]['name']|replace({' ':'_'})}}' ><img src="{{servant[i]['extraAssets']['faces']['ascension']['0']}}"/></a></td>
+					<td  class='servantPic'><a href='/fgo/servant/{{servant[i]['name']|replace({' ':'_'})}}' ><img src="{{servant[i]['extraAssets']['charaGraph']['ascension']['0']}}"/></a></td>
 				{% endif %}
 				<td>
 					{% for j in 1..servant[i].rarity %}
@@ -33,5 +33,44 @@
 			</tr>
 		{% endfor %}
 	</tbody>
+</table> #}
+{% for row in servant|batch(4, 'undefined') %}
+	<table class='servantList'>
+		<tbody>
+			<tr>
+				{% for column in row %}
+					<td class='rarity'>
+						{% if column['name'] is defined %}
+							{% for j in 1..column['rarity'] %}
+								★
+							{% endfor %}
+						{% endif %}
+					</td>
+				{% endfor %}
+			</tr>
+			<tr>
+				{% for column in row %}
+					<td class='servantPic'>
+						{% if column['name'] is defined %}
+							<a href='/fgo/servant/{{column['name']|replace({' ':'_'})}}'><img class='asc1' src="{{column['extraAssets']['charaGraph']['ascension']['1']}}"/></a>
+							{# <a href='/fgo/servant/{{column['name']|replace({' ':'_'})}}'><img class='asc2' src="{{column['extraAssets']['charaGraph']['ascension']['2']}}"/></a>																									    <a href='/fgo/servant/{{column['name']|replace({' ':'_'})}}'><img class='asc3' src="{{column['extraAssets']['charaGraph']['ascension']['3']}}"/></a> #}
+						{% endif %}
+					</td>
+				{% endfor %}
+			</tr>
+		
+		</tr>
+		<tr>
+			{% for column in row %}
+				<td class='bold'>
+					{% if column['name'] is defined %}
+						<a href='/fgo/servant/{{column['name']|replace({' ':'_'})}}'>{{column['name']}}</a>
+					{% endif %}
+				</td>
+			{% endfor %}
+		</tr>
+	</tbody>
 </table>
-{# {{Id}} #}
+<br>
+{% endfor %}
+<script src="{{ asset('js/script.js') }}"></script>

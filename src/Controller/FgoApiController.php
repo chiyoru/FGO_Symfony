@@ -15,58 +15,24 @@ use Symfony\Component\HttpFoundation\Request;
 
 class FgoApiController extends AbstractController
 {
-    public function fetchFgoDB(HttpClientInterface $client, Request $request): Response
+    public function index(HttpClientInterface $client, Request $request): Response
     {
-        $session = $request->getSession();
-        $session->remove('classe');
-
-        #region form#
-        $classes = new Classes();
-        // $task->setClasse('Rider');
-
-        $choices = array(
-            'Saber' => 'saber',
-            'Archer' => 'archer',
-            'Lancer' => 'lancer',
-            'Rider' => 'rider',
-            'Caster' => 'caster',
-            'Assassin' => 'assassin',
-            'Berserker' => 'berserker',
-            'Ruler' => 'ruler',
-            'Avenger' => 'avenger',
-            'Moon Cancer' => 'moonCancer',
-            'Alter Ego' => 'alterEgo',
-            'Foreigner' => 'foreigner',
-            'Pretender' => 'pretender',
-            'Shielder' => 'shielder',
-            // 'Beast' => 'beast'
-        );
-
-        $form = $this->createForm(ClassesType::class, $classes, ['choices' => $choices]);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $task = $form->getData();
-            $selectedVal = $task->getClasse();
-            $session->set('classe', $selectedVal);
-            return $this->redirectToRoute('servants');
-        }
-        #endregion form#
-
         return $this->render(
-            'fgo_api/index.html.twig',
-            [
-                'form' => $form,
-            ]
+            'fgo_api/index.html.twig'
         );
     }
 
     public function servantList(HttpClientInterface $client, Request $request): Response
     {
-        $session = $request->getSession();
+        $session = $request->getSession(); //Create session
+        $session->remove('classe'); //Remove it on load of page
 
-        $classe = $session->get('classe');
-        $response = $client->request(
+        $routeParameters = $request->attributes->get('_route_params'); //get route parameters
+        $classe = $routeParameters['classe']; //get classe name
+
+        $session->set('classe', $classe); //Put it in a session for a later use
+
+        $response = $client->request( //Api
             'GET',
             'https://api.atlasacademy.io/export/NA/nice_servant.json'
         );
@@ -103,7 +69,6 @@ class FgoApiController extends AbstractController
         $session = $request->getSession();
 
         $classe = $session->get('classe');
-
         $response = $client->request(
             'GET',
             'https://api.atlasacademy.io/export/NA/nice_servant.json'
@@ -134,6 +99,7 @@ class FgoApiController extends AbstractController
             'fgo_api/servant.html.twig',
             [
                 'servant' => $result,
+                'debug' => true
 
             ]
         );
