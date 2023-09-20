@@ -34,7 +34,7 @@ class FgoApiController extends AbstractController
 
         $response = $client->request( //Api
             'GET',
-            'https://api.atlasacademy.io/export/NA/nice_servant.json'
+            'https://api.atlasacademy.io/nice/NA/servant/search?className='. $classe
         );
 
         $statusCode = $response->getStatusCode();
@@ -42,15 +42,7 @@ class FgoApiController extends AbstractController
         $content = $response->getContent();
         $content = $response->toArray();
 
-        $result = array_filter($content, function ($item) use ($classe) {
-            if (stripos($item['className'], $classe) !== false) {
-                return true;
-            }
-            return false;
-        });
-
-        $result = array_values($result);
-
+        $result = $content;
         return $this->render(
             'fgo_api/servants.html.twig',
             [
@@ -71,7 +63,7 @@ class FgoApiController extends AbstractController
         $classe = $session->get('classe');
         $response = $client->request(
             'GET',
-            'https://api.atlasacademy.io/export/NA/nice_servant.json'
+            'https://api.atlasacademy.io/nice/NA/servant/search?className=' . $classe
         );
 
         $statusCode = $response->getStatusCode();
@@ -79,21 +71,32 @@ class FgoApiController extends AbstractController
         $content = $response->getContent();
         $content = $response->toArray();
 
-        foreach ($content as $servants => $key) {
-            if ($key['className'] != $classe) {
-                unset($content[$servants]);
+        if ($idServant == 'BB_(Summer)') {
+            foreach ($content as $servants => $key) {
+                if ($key['name'] != 'BB') {
+                    unset($content[$servants]);
+                }
+                if($key['rarity'] != 5){
+                    unset($content[$servants]);
+                }
+            }
+        } else  if ($idServant == 'BB') {
+            foreach ($content as $servants => $key) {
+                if ($key['name'] != 'BB') {
+                    unset($content[$servants]);
+                }
+                if($key['rarity'] != 4){
+                    unset($content[$servants]);
+                }
+            }
+        } else {
+            foreach ($content as $servants => $key) {
+                if ($key['name'] != str_replace(array('_', '-'), array(' ', '/'), $idServant)) {
+                    unset($content[$servants]);
+                }
             }
         }
 
-        $content = array_values($content);
-
-        foreach ($content as $servants => $key) {
-            if ($key['name'] != str_replace('_', ' ', $idServant)) {
-                unset($content[$servants]);
-            }
-        }
-
-        
         $result = array_merge(...$content);
         return $this->render(
             'fgo_api/servant.html.twig',
