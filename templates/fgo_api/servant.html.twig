@@ -1,6 +1,67 @@
 <link href="{{ asset('css/servant.css') }}" rel="stylesheet"/>
 <h1>{{servant.name}}</h1>
-<img id="asc1" class='asc' src="{{servant['extraAssets']['charaGraph']['ascension']['1']}}"/>
-<img id="asc2" class='asc' src="{{servant['extraAssets']['charaGraph']['ascension']['2']}}"/>
-<img id="asc3" class='asc' src="{{servant['extraAssets']['charaGraph']['ascension']['3']}}"/>
-<img id="asc4" class='asc' src="{{servant['extraAssets']['charaGraph']['ascension']['4']}}"/>
+
+<table id='table-ascensions'>
+	<tbody>
+		<tr>
+			<td>
+				<button id='btn-asc1' class='btn-asc'>Ascension 1</button>
+			</td>
+			<td>
+				<button id='btn-asc2' class='btn-asc'>Ascension 2</button>
+			</td>
+			<td>
+				<button id='btn-asc3' class='btn-asc'>Ascension 3</button>
+			</td>
+			<td>
+				<button id='btn-asc4' class='btn-asc'>Ascension 4</button>
+			</td>
+			{% if servant['extraAssets']['charaGraph']['costume'] is defined %}
+				{% set len = servant['extraAssets']['charaGraph']['costume']|length %}
+				{% for i in 1..len %}
+					{% set idBtn = 'btn-costume'~i %}
+					<td>
+						<button id='{{idBtn}}' class='btn-costume'>Costume{{i}}</button>
+					</td>
+				{% endfor %}
+			{% endif %}
+		</tr>
+		<tr>
+			<td><img id="asc1" class='asc is-visible' src="{{servant['extraAssets']['charaGraph']['ascension']['1']}}"/></td>
+			<td><img id="asc2" class='asc' src="{{servant['extraAssets']['charaGraph']['ascension']['2']}}"/></td>
+			<td><img id="asc3" class='asc' src="{{servant['extraAssets']['charaGraph']['ascension']['3']}}"/></td>
+			<td><img id="asc4" class='asc' src="{{servant['extraAssets']['charaGraph']['ascension']['4']}}"/></td>
+			{% if servant['extraAssets']['charaGraph']['costume'] is defined %}
+				{% set len = servant['extraAssets']['charaGraph']['costume']|length %}
+				{% for j in 1..len %}
+					{% set costume = (j+2)*10 %}
+					{% set costumeId = servant.id + costume %}
+					{% set id = 'costume'~j %}
+					<td><img id='{{id}}' class='costume' src="{{servant['extraAssets']['charaGraph']['costume'][costumeId]}}"/></td>
+				{% endfor %}
+			{% endif %}
+		</tr>
+	</tbody>
+</table>
+{# <table id='table-costumes'>
+	<tbody>
+		{% if servant['extraAssets']['charaGraph']['costume'] is defined %}
+			{% set len = servant['extraAssets']['charaGraph']['costume']|length %}
+            <tr>
+				{% for i in 1..len %}
+					{% set idBtn = 'btn-costume'~i %}
+					<td><button id='{{idBtn}}' class='btn-costume'>Costume {{i}}</button></td>
+				{% endfor %}
+			</tr>
+			<tr>
+				{% for j in 1..len %}
+					{% set costume = (j+2)*10 %}
+					{% set costumeId = servant.id + costume %}
+					{% set id = 'costume'~j %}
+					<td><img id='{{id}}' class='costume' src="{{servant['extraAssets']['charaGraph']['costume'][costumeId]}}"/></td>
+				{% endfor %}
+			</tr>
+		{% endif %}
+	</tbody>
+</table> #}
+<script src="{{ asset('js/script.js') }}"></script>
