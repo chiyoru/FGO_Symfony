@@ -9,17 +9,17 @@ body{
     /* overflow: hidden; */
 }
 #classList, #classList td, #classList tr, #classList th{
-    border: 1px solid #bfc2c6;
+    border: 1px solid #414348c1;
     border-collapse: collapse;
     text-align: center;
-    background-color: #eaedf0;
+    background-color: #1E1F22;
     padding: 1vw;
     border-width: 1px;
-    color: #251F47;
+    /* color: #251F47; */
     font-weight: bold;
     width: 14%;
 }
-.servantList{
+.servantList, #classList{
     margin: auto;
 }
 .servantList, .servantList td, .servantList tr, .servantList th{
