@@ -21,7 +21,7 @@
 							{% if column['name'] == 'BB' and column['rarity'] == 5 %}
 								<a href='/fgo/servant/BB_(Summer)'><img class='asc1' src="{{column['extraAssets']['charaGraph']['ascension']['1']}}"/></a>
 							{% else %}
-								<a href='/fgo/servant/{{column['name']|replace({' ':'_', '/':'-'})}}'><img class='asc1' src="{{column['extraAssets']['charaGraph']['ascension']['1']}}"/></a>
+								<a href='/fgo/servant/{{column['name']|replace({' ':'_', '/':'&'})}}'><img class='asc1' src="{{column['extraAssets']['charaGraph']['ascension']['1']}}"/></a>
 								{# <a href='/fgo/servant/{{column['name']|replace({' ':'_'})}}'><img class='asc2' src="{{column['extraAssets']['charaGraph']['ascension']['2']}}"/></a>																									    <a href='/fgo/servant/{{column['name']|replace({' ':'_'})}}'><img class='asc3' src="{{column['extraAssets']['charaGraph']['ascension']['3']}}"/></a> #}
 							{% endif %}
 						{% endif %}
@@ -32,7 +32,7 @@
 				{% for column in row %}
 					<td class='bold'>
 						{% if column['name'] is defined %}
-							<a href='/fgo/servant/{{column['name']|replace({' ':'_','/':'-'})}}'>{{column['name']}}</a>
+							<a href='/fgo/servant/{{column['name']|replace({' ':'_',' /':'-'})}}'>{{column['name']}}</a>
 						{% endif %}
 					</td>
 				{% endfor %}

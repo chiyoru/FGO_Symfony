@@ -3,11 +3,59 @@ body{
     background-color: #313338;
     color: #D6DBE1;
 }
+
+#name{
+    /* width: fit-content; */
+    padding: 1vw;
+    font-size: 1.2vw;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid white;
+}
+
+.img-class{
+    transform: scale(0.6);
+}
+
+#rarity{
+    color: #FFED65;
+    margin-left: 1vw;
+}
+
+.infos-servant{
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+}
+
+
+.right{
+    padding: 1vw;
+}
+
+.general{
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+}
+
+.card-img{
+    width: 10%;
+}
+
+.card-np{
+   width: 75px;
+}
+
 table{
     text-align: center;
 }
+
+#btn-ascensions{
+    margin: 0 20%;
+}
 .asc, .costume{
     width: 15vw;
+    margin: 1vw 25%;
 }
 
 .asc, .costume{
@@ -16,4 +64,54 @@ table{
 
 .is-visible {
     display: block;
+}
+
+.table-skills, .table-np{
+    display: none;
+}
+
+.table-skills, 
+.table-skills td, 
+.table-skills tr, 
+.table-skills th,
+.table-np,
+.table-np td,
+.table-np tr,
+.table-np th{
+    border: 1px solid #414348c1;
+    border-collapse: collapse;
+    text-align: center;
+    background-color: #1E1F22;
+    padding: 1vw;
+    margin: 1vw 0;
+    /* color: #251F47; */
+}
+
+.table-np tr:nth-child(odd) td{
+    background-color: #ccc5b9;
+    color: black;
+}
+
+.table-is-visible {
+    display: table;
+}
+
+
+.skill-description{
+    border: 1px solid #414348c1;
+    padding: 1vw;
+    width: fit-content;
+}
+
+.skill-img {
+    width: 10%;
+}
+
+.skill-img img{
+    width: 3vw;
+}
+
+
+.bold{
+    font-weight: 700;
 }
