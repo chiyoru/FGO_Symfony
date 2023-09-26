@@ -13,13 +13,15 @@
 <div class='infos-servant'>
 	<div class='left'>
 		<div id='btn-ascensions'>
-			<button id='btn-asc1' class='btn-asc'>Ascension 1</button>
+			{% if servant['extraAssets']['charaGraph']['ascension']['1'] is defined %}
+				<button id='btn-asc1' class='btn-asc'>Ascension 1</button>
 
-			<button id='btn-asc2' class='btn-asc'>Ascension 2</button>
+				<button id='btn-asc2' class='btn-asc'>Ascension 2</button>
 
-			<button id='btn-asc3' class='btn-asc'>Ascension 3</button>
+				<button id='btn-asc3' class='btn-asc'>Ascension 3</button>
 
-			<button id='btn-asc4' class='btn-asc'>Ascension 4</button>
+				<button id='btn-asc4' class='btn-asc'>Ascension 4</button>
+			{% endif %}
 
 			{% if servant['extraAssets']['charaGraph']['costume'] is defined %}
 				{% set len = servant['extraAssets']['charaGraph']['costume']|length %}
@@ -31,10 +33,15 @@
 				{% endfor %}
 			{% endif %}
 		</div>
-		<img id="asc1" class='asc is-visible' src="{{servant['extraAssets']['charaGraph']['ascension']['1']}}"/>
-		<img id="asc2" class='asc' src="{{servant['extraAssets']['charaGraph']['ascension']['2']}}"/>
-		<img id="asc3" class='asc' src="{{servant['extraAssets']['charaGraph']['ascension']['3']}}"/>
-		<img id="asc4" class='asc' src="{{servant['extraAssets']['charaGraph']['ascension']['4']}}"/>
+		{% if servant['extraAssets']['charaGraph']['ascension']['1'] is defined %}
+			<img id="asc1" class='asc is-visible' src="{{servant['extraAssets']['charaGraph']['ascension']['1']}}"/>
+			<img id="asc2" class='asc' src="{{servant['extraAssets']['charaGraph']['ascension']['2']}}"/>
+			<img id="asc3" class='asc' src="{{servant['extraAssets']['charaGraph']['ascension']['3']}}"/>
+			<img id="asc4" class='asc' src="{{servant['extraAssets']['charaGraph']['ascension']['4']}}"/>
+		{% else %}
+			<img id="asc0" class='asc is-visible' src="{{servant['extraAssets']['charaGraph']['ascension']['0']}}"/>
+		{% endif %}
+
 		{% if servant['extraAssets']['charaGraph']['costume'] is defined %}
 			{% set len = servant['extraAssets']['charaGraph']['costume']|length %}
 			{% for j in 1..len %}
@@ -67,22 +74,30 @@
 				-
 				{{servant.hpMax|number_format}}
 			</p>
-			<p>
-				<span class='bold'>ATK Lv.100</span>:
-				{{servant.atkGrowth[99]|number_format}}
-			</p>
-			<p>
-				<span class='bold'>HP Lv.100</span>:
-				{{servant.hpGrowth[99]|number_format}}
-			</p>
-			<p>
-				<span class='bold'>ATK Lv.120</span>:
-				{{servant.atkGrowth[119]|number_format}}
-			</p>
-			<p>
-				<span class='bold'>HP Lv.120</span>:
-				{{servant.hpGrowth[119]|number_format}}
-			</p>
+			{% if servant.atkGrowth[99] is defined %}
+				<p>
+					<span class='bold'>ATK Lv.100</span>:
+					{{servant.atkGrowth[99]|number_format}}
+				</p>
+			{% endif %}
+			{% if servant.hpGrowth[99] is defined %}
+				<p>
+					<span class='bold'>HP Lv.100</span>:
+					{{servant.hpGrowth[99]|number_format}}
+				</p>
+			{% endif %}
+			{% if servant.atkGrowth[119] is defined %}
+				<p>
+					<span class='bold'>ATK Lv.120</span>:
+					{{servant.atkGrowth[119]|number_format}}
+				</p>
+			{% endif %}
+			{% if servant.hpGrowth[119] is defined %}
+				<p>
+					<span class='bold'>HP Lv.120</span>:
+					{{servant.hpGrowth[119]|number_format}}
+				</p>
+			{% endif %}
 		</div>
 		{% for card in servant.cards %}
 			{% set cardImg = '/images/Command-Card-'~ card|capitalize ~'.png' %}
@@ -92,140 +107,147 @@
 </div>
 
 <br>
-<button id='btn-skill1' class='btn-skill'>
-	Skill 1</button>
-<button id='btn-skill2' class='btn-skill'>
-	Skill 2</button>
-<button id='btn-skill3' class='btn-skill'>
-	Skill 3</button>
+{% if skill1['name'] is defined %}
+	<button id='btn-skill1' class='btn-skill'>
+		Skill 1</button>
+	<button id='btn-skill2' class='btn-skill'>
+		Skill 2</button>
+	<button id='btn-skill3' class='btn-skill'>
+		Skill 3</button>
 
-{% set lenS1 = skill1['name']|length - 1 %}
-<table class='table-skills table-is-visible' id='skill1'>
-	<thead>
-		<tr>
-			{% for s1 in 0..lenS1  %}
-				<th class='skill-img'>
-					<img src="{{skill1['icon'][s1]}}"/>
-				</th>
-				<th>
-					{{skill1['name'][s1]}}
-				</th>
-			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			{% for s1 in 0..lenS1  %}
-				<td colspan='2' class='skill-description'>
-					{{skill1['detail'][s1]|replace({' & ':'.<br>'})|raw}}
-				</td>
-			{% endfor %}
-		</tr>
-	</tbody>
-</table>
-
-{% set lenS2 = skill2['name']|length - 1 %}
-
-<table class='table-skills' id='skill2'>
-	<thead>
-		<tr>
-			{% for s2 in 0..lenS2  %}
-				<th class='skill-img'>
-					<img src="{{skill2['icon'][s2]}}"/>
-				</th>
-				<th>
-					{{skill2['name'][s2]}}
-				</th>
-			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			{% for s2 in 0..lenS2  %}
-				<td colspan='2' class='skill-description'>
-					{{skill2['detail'][s2]|replace({' & ':'.<br>'})|raw}}
-				</td>
-			{% endfor %}
-		</tr>
-	</tbody>
-</table>
-
-{% set lenS3 = skill3['name']|length - 1 %}
-
-<table class='table-skills' id='skill3'>
-	<thead>
-		<tr>
-			{% for s3 in 0..lenS3  %}
-				<th class='skill-img'>
-					<img src="{{skill3['icon'][s3]}}"/>
-				</th>
-				<th>
-					{{skill3['name'][s3]}}
-				</th>
-			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			{% for s3 in 0..lenS3  %}
-				<td colspan='2' class='skill-description'>
-					{{skill3['detail'][s3]|replace({' & ':'.<br>'})|raw}}
-				</td>
-			{% endfor %}
-		</tr>
-	</tbody>
-</table>
-
-{% set lenNP = np['name']|length - 1 %}
-
-{% for nobleP in 0..lenNP  %}
-	<button id='btn-np{{nobleP + 1}}' class='btn-np'>NP {{nobleP + 1}}</button>
-{% endfor %}
-
-{% for nobleP in 0..lenNP  %}
-	{% if loop.first == true %}<br>
-		<table class='table-np table-is-visible' id='np{{nobleP + 1}}'>
-	{% else %}
-		<table class='table-np' id='np{{nobleP + 1}}'>
-	{% endif %}
+	{% set lenS1 = skill1['name']|length - 1 %}
+	<table class='table-skills table-is-visible' id='skill1'>
 		<thead>
 			<tr>
-				<th>
-					<img class='card-np' src="/images/Command-Card-{{np['card'][nobleP]}}.png"/>
-				</th>
-				{% set colspan = np['npValue'][nobleP]|length %}
-				<th colspan='{{colspan - 1}}'>
-					{{np['name'][nobleP]}}
-				</th>
+				{% for s1 in 0..lenS1  %}
+					<th class='skill-img'>
+						<img src="{{skill1['icon'][s1]}}"/>
+					</th>
+					<th>
+						{{skill1['name'][s1]}}
+					</th>
+				{% endfor %}
 			</tr>
 		</thead>
 		<tbody>
-			<tr class='bold'>
-				<td colspan='2'> {{np['rank'][nobleP]}} </td>
-				<td colspan={{colspan - 2 }}> {{np['type'][nobleP]}} </td>
-			</tr>
 			<tr>
-				<td colspan='{{colspan}}'>
-					{{np['detail'][nobleP]|replace({' & ':'.<br>'})|raw}}
-				</td>
-			</tr>
-			<tr class='bold'>
-				{% for npValue in 0..np['npValue'][nobleP]|length - 1%}
-					<td>
-						NP Lv.{{npValue + 1}}
-					{% endfor %}
-				</tr>
-			</tr>
-			<tr>
-				{% for npValue in 0..np['npValue'][nobleP]|length - 1%}
-					<td>
-						{{np['npValue'][nobleP][npValue]['Value']/10}}%
-						{% if loop.last == false %}<br>
-						{% endif %}
+				{% for s1 in 0..lenS1  %}
+					<td colspan='2' class='skill-description'>
+						{{skill1['detail'][s1]|replace({' & ':'.<br>'})|raw}}
 					</td>
 				{% endfor %}
 			</tr>
 		</tbody>
 	</table>
-{% endfor %}
+
+	{% set lenS2 = skill2['name']|length - 1 %}
+
+	<table class='table-skills' id='skill2'>
+		<thead>
+			<tr>
+				{% for s2 in 0..lenS2  %}
+					<th class='skill-img'>
+						<img src="{{skill2['icon'][s2]}}"/>
+					</th>
+					<th>
+						{{skill2['name'][s2]}}
+					</th>
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				{% for s2 in 0..lenS2  %}
+					<td colspan='2' class='skill-description'>
+						{{skill2['detail'][s2]|replace({' & ':'.<br>'})|raw}}
+					</td>
+				{% endfor %}
+			</tr>
+		</tbody>
+	</table>
+
+	{% set lenS3 = skill3['name']|length - 1 %}
+
+	<table class='table-skills' id='skill3'>
+		<thead>
+			<tr>
+				{% for s3 in 0..lenS3  %}
+					<th class='skill-img'>
+						<img src="{{skill3['icon'][s3]}}"/>
+					</th>
+					<th>
+						{{skill3['name'][s3]}}
+					</th>
+				{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				{% for s3 in 0..lenS3  %}
+					<td colspan='2' class='skill-description'>
+						{{skill3['detail'][s3]|replace({' & ':'.<br>'})|raw}}
+					</td>
+				{% endfor %}
+			</tr>
+		</tbody>
+	</table>
+
+	{% set lenNP = np['name']|length - 1 %}
+
+	{% for nobleP in 0..lenNP  %}
+		<button id='btn-np{{nobleP + 1}}' class='btn-np'>Rank
+			{{np['rank'][nobleP]}}</button>
+	{% endfor %}
+
+	{% for nobleP in 0..lenNP  %}
+		{% if loop.first == true %}<br>
+			<table class='table-np table-is-visible' id='np{{nobleP + 1}}'>
+		{% else %}
+				<table class='table-np' id='np{{nobleP + 1}}'>
+		{% endif %}
+				<thead>
+					<tr>
+						<th>
+							<img class='card-np' src="/images/Command-Card-{{np['card'][nobleP]}}.png"/>
+						</th>
+						{% set colspan = np['npValue'][nobleP]|length %}
+						<th colspan='{{colspan - 1}}'>
+							{{np['name'][nobleP]}}
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class='bold'>
+						<td colspan='2'>
+							{{np['rank'][nobleP]}}
+						</td>
+						<td colspan={{colspan - 2 }}>
+							{{np['type'][nobleP]}}
+						</td>
+					</tr>
+					<tr>
+						<td colspan='{{colspan}}'>
+							{{np['detail'][nobleP]|replace({' & ':'.<br>'})|raw}}
+						</td>
+					</tr>
+					<tr class='bold'>
+						{% for npValue in 0..np['npValue'][nobleP]|length - 1%}
+							<td>
+								NP Lv.{{npValue + 1}}
+							{% endfor %}
+						</tr>
+					</tr>
+					<tr>
+						{% for npValue in 0..np['npValue'][nobleP]|length - 1%}
+							<td>
+								{{np['npValue'][nobleP][npValue]['Value']/10}}%
+								{% if loop.last == false %}<br>
+								{% endif %}
+							</td>
+						{% endfor %}
+					</tr>
+				</tbody>
+			</table>
+	{% endfor %}
+{% endif %}
 <script src="{{ asset('js/script.js') }}"></script>
