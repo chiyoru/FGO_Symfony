@@ -130,41 +130,7 @@ class FgoApiController extends AbstractController
                 $np['str'][] = $noblePhantasm['strengthStatus'];
             }
 
-            //Tests for differents np value 
-
-            $buff = 1;
-            for ($i = 0; $i < count($noblePhantasm['functions']); $i++) {
-                if (
-                    array_key_exists('Value', $noblePhantasm['functions'][$i]['svals'][0])
-                    && $noblePhantasm['functions'][$i]['svals'][0]['Value'] > 1000
-                    && empty($noblePhantasm['functions'][$i]['buffs'])
-                ) {
-
-                    $np['npValue'][] = $noblePhantasm['functions'][$i]['svals'];
-                } else if (
-                    array_key_exists('Value', $noblePhantasm['functions'][$i]['svals'][0])
-                    && !empty($noblePhantasm['functions'][$i]['buffs'])
-                ) {
-
-                    if ($noblePhantasm['functions'][$i]['funcTargetTeam'] != 'enemy') { //some buff applies to enemy only, so skip it
-                        for ($s = 1; $s < 6; $s++) {
-                            if ($s > 1) {
-                                $svals = 'svals' . $s;
-                            } else {
-                                $svals = 'svals';
-                            }
-
-                            $np['npValue'][$a]['buff' . $buff][$s] = $noblePhantasm['functions'][$i][$svals];
-                        }
-
-                        $np['npBuff'][$a][$buff] = $noblePhantasm['functions'][$i]['buffs'][0]['name'];
-                        $buff++;
-
-                    }
-                }
-            }
-
-            $a++;
+            //Put NP values there when needed
         }
         //skills details
         foreach ($result['skills'] as $skill) {

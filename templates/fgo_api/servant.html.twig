@@ -251,47 +251,8 @@
 							{{np['detail'][nobleP]|replace({' & ':'.<br>'})|raw}}
 						</td>
 					</tr>
-					<tr class='bold important-infos'>
-						{% for npLevel in 1..5 %}
-							{# For each np value #}
-							<td>
-								NP Lv.{{npLevel}}
-								{# print NP lvl #}
-							</td>
-						{% endfor %}
-					</tr>
-					{% if np['npBuff'] is defined %}
-						{# if np buff exists #}
-						{% for buff in 1..np['npBuff'][nobleP]|length %}
-							<tr>
-								{% for npValue in 0..np['npValue'][nobleP]['buff1']|length - 1%}
-									{# For each np value #}
-									{% set buffNp = 'buff'~buff %}
-									<td>
-										{% if np['npValue'][nobleP][buffNp][1][npValue]['Rate'] < 1000 %}
-											Chance of
-											{{np['npBuff'][nobleP][buff]}}
-											+
-											{{np['npValue'][nobleP][buffNp][1][npValue]['Rate']/10}}%
-										{% else %}
-											{{np['npBuff'][nobleP][buff]}}
-										{% endif %}
-									</td>
-								{% endfor %}
-							</tr>
-						{% endfor %}
-					{% else %}
-						{# else it is a np that does damage #}
-						<tr>
-							{% for npValue in 0..np['npValue'][nobleP]|length - 1%}
-								{# For each np value #}
-								<td>
-									{{np['npValue'][nobleP][npValue]['Value']/10}}%
-									{# print NP value, divided by 10 to make it a percentage #}
-								</td>
-							{% endfor %}
-						</tr>
-					{% endif %}
+					{# put np file here when needed #}
+					
 				</tbody>
 			</table>
 		{% endfor %}
