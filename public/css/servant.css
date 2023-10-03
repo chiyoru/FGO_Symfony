@@ -87,8 +87,8 @@ table{
     /* color: #251F47; */
 }
 
-.table-np tr:nth-child(odd) td{
-    background-color: #ccc5b9;
+tr.important-infos td{
+    background-color: #ccc5b9 !important;
     color: black;
 }
 

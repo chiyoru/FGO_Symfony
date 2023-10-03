@@ -110,11 +110,17 @@
 {% if skill1['name'] is defined %}
 	<button id='btn-skill1' class='btn-skill'>
 		Skill 1</button>
+{% endif %}
+{% if skill2['name'] is defined %}
 	<button id='btn-skill2' class='btn-skill'>
 		Skill 2</button>
+{% endif %}
+{% if skill3['name'] is defined %}
 	<button id='btn-skill3' class='btn-skill'>
 		Skill 3</button>
+{% endif %}
 
+{% if skill1['name'] is defined %}
 	{% set lenS1 = skill1['name']|length - 1 %}
 	<table class='table-skills table-is-visible' id='skill1'>
 		<thead>
@@ -139,7 +145,9 @@
 			</tr>
 		</tbody>
 	</table>
+{% endif %}
 
+{% if skill2['name'] is defined %}
 	{% set lenS2 = skill2['name']|length - 1 %}
 
 	<table class='table-skills' id='skill2'>
@@ -165,7 +173,9 @@
 			</tr>
 		</tbody>
 	</table>
+{% endif %}
 
+{% if skill3['name'] is defined %}
 	{% set lenS3 = skill3['name']|length - 1 %}
 
 	<table class='table-skills' id='skill3'>
@@ -191,33 +201,44 @@
 			</tr>
 		</tbody>
 	</table>
+{% endif %}
 
+{% if np['name'] is defined %}
+	{# If np exists #}
 	{% set lenNP = np['name']|length - 1 %}
 
 	{% for nobleP in 0..lenNP  %}
+		{# For each np, new np button #}
 		<button id='btn-np{{nobleP + 1}}' class='btn-np'>Rank
 			{{np['rank'][nobleP]}}</button>
 	{% endfor %}
 
 	{% for nobleP in 0..lenNP  %}
+		{# For each np, new np table #}
 		{% if loop.first == true %}<br>
+			{# If first loop, table is visible, else is not #}
 			<table class='table-np table-is-visible' id='np{{nobleP + 1}}'>
-		{% else %}
+			{% else %}
 				<table class='table-np' id='np{{nobleP + 1}}'>
-		{% endif %}
+				{% endif %}
 				<thead>
 					<tr>
 						<th>
 							<img class='card-np' src="/images/Command-Card-{{np['card'][nobleP]}}.png"/>
 						</th>
-						{% set colspan = np['npValue'][nobleP]|length %}
+						{% if np['npBuff'] is defined %}
+							{# if np buff exists #}
+							{% set colspan = np['npValue'][nobleP]['buff1']|length %}
+						{% else %}
+							{% set colspan = np['npValue'][nobleP]|length %}
+						{% endif %}
 						<th colspan='{{colspan - 1}}'>
 							{{np['name'][nobleP]}}
 						</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr class='bold'>
+					<tr class='bold important-infos'>
 						<td colspan='2'>
 							{{np['rank'][nobleP]}}
 						</td>
@@ -230,24 +251,49 @@
 							{{np['detail'][nobleP]|replace({' & ':'.<br>'})|raw}}
 						</td>
 					</tr>
-					<tr class='bold'>
-						{% for npValue in 0..np['npValue'][nobleP]|length - 1%}
+					<tr class='bold important-infos'>
+						{% for npLevel in 1..5 %}
+							{# For each np value #}
 							<td>
-								NP Lv.{{npValue + 1}}
-							{% endfor %}
-						</tr>
-					</tr>
-					<tr>
-						{% for npValue in 0..np['npValue'][nobleP]|length - 1%}
-							<td>
-								{{np['npValue'][nobleP][npValue]['Value']/10}}%
-								{% if loop.last == false %}<br>
-								{% endif %}
+								NP Lv.{{npLevel}}
+								{# print NP lvl #}
 							</td>
 						{% endfor %}
 					</tr>
+					{% if np['npBuff'] is defined %}
+						{# if np buff exists #}
+						{% for buff in 1..np['npBuff'][nobleP]|length %}
+							<tr>
+								{% for npValue in 0..np['npValue'][nobleP]['buff1']|length - 1%}
+									{# For each np value #}
+									{% set buffNp = 'buff'~buff %}
+									<td>
+										{% if np['npValue'][nobleP][buffNp][1][npValue]['Rate'] < 1000 %}
+											Chance of
+											{{np['npBuff'][nobleP][buff]}}
+											+
+											{{np['npValue'][nobleP][buffNp][1][npValue]['Rate']/10}}%
+										{% else %}
+											{{np['npBuff'][nobleP][buff]}}
+										{% endif %}
+									</td>
+								{% endfor %}
+							</tr>
+						{% endfor %}
+					{% else %}
+						{# else it is a np that does damage #}
+						<tr>
+							{% for npValue in 0..np['npValue'][nobleP]|length - 1%}
+								{# For each np value #}
+								<td>
+									{{np['npValue'][nobleP][npValue]['Value']/10}}%
+									{# print NP value, divided by 10 to make it a percentage #}
+								</td>
+							{% endfor %}
+						</tr>
+					{% endif %}
 				</tbody>
 			</table>
-	{% endfor %}
-{% endif %}
-<script src="{{ asset('js/script.js') }}"></script>
+		{% endfor %}
+	{% endif %}
+	<script src="{{ asset('js/script.js') }}"></script>

@@ -43,6 +43,7 @@ class FgoApiController extends AbstractController
         $content = $response->toArray();
 
         $result = $content;
+
         return $this->render(
             'fgo_api/servants.html.twig',
             [
@@ -106,9 +107,11 @@ class FgoApiController extends AbstractController
 
         $np = array();
 
+        $a = 0;
+
         //noble phantasms details, for each that exists (it includes card type changes (like S.Ishtar or Emiya) and np upgrades)
         foreach ($result['noblePhantasms'] as $noblePhantasm) {
-            $np['name'][] = $noblePhantasm['name']; 
+            $np['name'][] = $noblePhantasm['name'];
             $detail = preg_replace_callback( //after "&", capitalize first letter - used to make a line break
                 '/\&\s*\K\w/',
                 function ($m) {
@@ -121,13 +124,48 @@ class FgoApiController extends AbstractController
             $np['rank'][] = $noblePhantasm['rank'];
             $np['type'][] = $noblePhantasm['type'];
 
-            if (array_key_exists('Value', $noblePhantasm['functions'][0]['svals'][0]) && $noblePhantasm['functions'][0]['svals'][0]['Value'] > 1000) {
-                $np['npValue'][] = $noblePhantasm['functions'][0]['svals'];
+            if ($noblePhantasm['strengthStatus'] == 0) {
+                $np['str'][] = 1;
             } else {
-                $np['npValue'][] = $noblePhantasm['functions'][1]['svals'];
+                $np['str'][] = $noblePhantasm['strengthStatus'];
             }
-        }
 
+            //Tests for differents np value 
+
+            $buff = 1;
+            for ($i = 0; $i < count($noblePhantasm['functions']); $i++) {
+                if (
+                    array_key_exists('Value', $noblePhantasm['functions'][$i]['svals'][0])
+                    && $noblePhantasm['functions'][$i]['svals'][0]['Value'] > 1000
+                    && empty($noblePhantasm['functions'][$i]['buffs'])
+                ) {
+
+                    $np['npValue'][] = $noblePhantasm['functions'][$i]['svals'];
+                } else if (
+                    array_key_exists('Value', $noblePhantasm['functions'][$i]['svals'][0])
+                    && !empty($noblePhantasm['functions'][$i]['buffs'])
+                ) {
+
+                    if ($noblePhantasm['functions'][$i]['funcTargetTeam'] != 'enemy') { //some buff applies to enemy only, so skip it
+                        for ($s = 1; $s < 6; $s++) {
+                            if ($s > 1) {
+                                $svals = 'svals' . $s;
+                            } else {
+                                $svals = 'svals';
+                            }
+
+                            $np['npValue'][$a]['buff' . $buff][$s] = $noblePhantasm['functions'][$i][$svals];
+                        }
+
+                        $np['npBuff'][$a][$buff] = $noblePhantasm['functions'][$i]['buffs'][0]['name'];
+                        $buff++;
+
+                    }
+                }
+            }
+
+            $a++;
+        }
         //skills details
         foreach ($result['skills'] as $skill) {
             switch ($skill['num']) {
@@ -184,9 +222,3 @@ class FgoApiController extends AbstractController
         );
     }
 }
-
-// array(3) { 
-//     ["name"]=> array(2) { [0]=> string(10) "Migraine B" [1]=> string(19) "Chalice of Wealth B" } 
-//     ["detail"]=> array(2) { [0]=> string(64) "Increase Mental Debuff Resist (3 turns). Restore HP for yourself" [1]=> string(174) "Increase NP Gauge ▲. Increase Arts Card effectiveness when on a [Near Water] or [City] field (3 turns) ▲. Increase Mental Debuff Resist (3 turns). Recover HP for yourself" } 
-//     ["icon"]=> array(2) { [0]=> string(60) "https://static.atlasacademy.io/NA/SkillIcons/skill_00401.png" [1]=> string(60) "https://static.atlasacademy.io/NA/SkillIcons/skill_00601.png" } 
-// }
