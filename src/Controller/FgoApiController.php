@@ -2,23 +2,94 @@
 
 namespace App\Controller;
 
-use App\Entity\Classes;
-use App\Form\Type\ClassesType;
-
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Users;
+use App\Form\Type\UserRegistrationType;
+use App\Form\Type\UserConnectionType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormFactoryInterface;
+use Doctrine\Persistence\ManagerRegistry;
+
+use App\Controller\UsersController;
 
 class FgoApiController extends AbstractController
 {
-    public function index(HttpClientInterface $client, Request $request): Response
+    public function index(FormFactoryInterface $formFactory, HttpClientInterface $client, EntityManagerInterface $entityManager, ValidatorInterface $validator, Request $request): Response
+    {
+        $session = $request->getSession(); //Create session
+
+        $errors = [];
+        $data = [];
+
+        $user = new Users();
+        $registrationForm = $formFactory->createNamed('registration', UserRegistrationType::class, $user);
+
+        $registrationForm->handleRequest($request);
+        if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
+            $userInfo = $registrationForm->getData(); //get form datas
+
+            $users = new Users();
+            $users->setUsername($userInfo->getUsername());
+            $users->setMail($userInfo->getMail());
+            $users->setPassword($userInfo->getPassword());
+
+            //check for errors
+            $errors = $validator->validate($users);
+            if (count($errors) > 0) {
+                $error = $errors;
+                $errNo = '400';
+
+                $errors[$errNo] = $errors;
+                $data['success'] = false;
+            } else {
+
+                $data['success'] = true;
+                $data['msg'] = 'Success! You can now access the whole website';
+                //save the query but no insert yet
+                $entityManager->persist($users);
+
+                //execute the query (insert)
+                $entityManager->flush();
+            }
+
+            $isAjax = $request->isXmlHttpRequest();
+            if ($isAjax) {
+                return new JsonResponse($data);
+            }
+        } else {
+        }
+
+        $connectionForm = $formFactory->createNamed('connection', UserConnectionType::class, $user);
+
+        $connectionForm->handleRequest($request);
+
+        if($connectionForm->isSubmitted() && $connectionForm->isValid()){
+            $userConnection = $connectionForm->getData(); //get form datas
+            $connectedUser = $entityManager->getRepository(Users::class)->findUser($userConnection->getMail(), $userConnection->getPassword());
+            $connectedUser = array_merge(...$connectedUser);
+            $session->set('username', $connectedUser['username']); //Put it in a session for a later use
+        }
+
+        return $this->render(
+            'index.html.twig',
+            [
+                'form_registration' => $registrationForm,
+                'form_connection' => $connectionForm,
+                'username' => $session->get('username')
+            ]
+
+        );
+    }
+
+    public function class(HttpClientInterface $client, Request $request): Response
     {
         return $this->render(
-            'fgo_api/index.html.twig'
+            'fgo_api/class.html.twig'
         );
     }
 

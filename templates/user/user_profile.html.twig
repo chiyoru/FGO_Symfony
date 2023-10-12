@@ -1,0 +1,34 @@
+{% block stylesheets %}
+	{{ encore_entry_link_tags('app') }}
+{% endblock %}
+<h1>
+	<img class='picture' src="{{picture}}"/> {{username}}'s profile
+</h1>
+<p>
+	password :
+	{{password}}
+	(that's just some test lmao)
+</p>
+<button id='btn-picture'>
+	Profile picture
+</button>
+<div >
+	<form name='pp' id='profile-picture'>
+		{% for i in 0..icons|length -1 %}
+
+			{% for j in 0..icons[i]|length -1 %}
+				{% if  icons[i][0] is defined%}
+					<img class='picture' src="{{icons[i][j]}}"/>
+				{% else %}
+					{% set j2 = j+1 %}
+					<img class='picture' src="{{icons[i][j2]}}"/>
+				{% endif %}
+			{% endfor %}
+		{% endfor %}
+		<button type='submit'> Submit </button>
+	</form>
+</div>
+{% block javascripts %}
+	{{ encore_entry_script_tags('app') }}
+{% endblock %}
+<script src="{{ asset('js/user.js') }}"></script>

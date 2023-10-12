@@ -1,4 +1,4 @@
-<link href="{{ asset('css/servant.css') }}" rel="stylesheet"/>
+ {% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
 {% set classImg = '/images/Class-'~ servant.className|capitalize ~'-Gold.png' %}
 <p id='name'>
 	<img id="class-{{servant.className}}" class='img-class' src={{classImg}} />
@@ -226,28 +226,22 @@
 						<th>
 							<img class='card-np' src="/images/Command-Card-{{np['card'][nobleP]}}.png"/>
 						</th>
-						{% if np['npBuff'] is defined %}
-							{# if np buff exists #}
-							{% set colspan = np['npValue'][nobleP]['buff1']|length %}
-						{% else %}
-							{% set colspan = np['npValue'][nobleP]|length %}
-						{% endif %}
-						<th colspan='{{colspan - 1}}'>
+						<th>
 							{{np['name'][nobleP]}}
 						</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr class='bold important-infos'>
-						<td colspan='2'>
+						<td>
 							{{np['rank'][nobleP]}}
 						</td>
-						<td colspan={{colspan - 2 }}>
+						<td>
 							{{np['type'][nobleP]}}
 						</td>
 					</tr>
 					<tr>
-						<td colspan='{{colspan}}'>
+						<td colspan='2'>
 							{{np['detail'][nobleP]|replace({' & ':'.<br>'})|raw}}
 						</td>
 					</tr>

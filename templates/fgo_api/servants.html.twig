@@ -1,4 +1,4 @@
-<link href="{{ asset('css/style.css') }}" rel="stylesheet"/>
+ {% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
 <h1>{{classe |capitalize}}</h1>
 {% for row in servant|batch(4, 'undefined') %}
 	<table class='servantList'>
