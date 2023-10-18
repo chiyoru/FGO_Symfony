@@ -23,3 +23,19 @@ $("form[name='registration'").on("submit", function (e) {
     }
   });
 });
+
+$("#log-out").on("click", function (e) {
+  $.ajax({
+    url: "/fgo/index",
+    type: "POST",
+    dataType: "JSON",
+    data: {
+      'logOut': 1,
+    },
+    success: function(data) {
+        if(data == 1){
+          location.reload();
+        }
+     }
+  });
+});

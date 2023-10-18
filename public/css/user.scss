@@ -4,14 +4,18 @@ body{
     color: #D6DBE1;
 }
 
-.is-visible {
+.is-visible{
     display: grid !important;
     grid-template-columns: repeat(4, 25%);
 }
 
-#profile-picture{
+#form-picture{
+    background-color: white;
+    width: fit-content;
+}
+
+#profile-picture, #submit-picture{
     display: none;
-    width: 50%;
 }
 
 .picture{

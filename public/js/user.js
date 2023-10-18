@@ -1,12 +1,15 @@
 var btnPicture = document.getElementById("btn-picture");
 var divPicture = document.getElementById("profile-picture");
 var pictures = document.querySelectorAll(".picture");
+var submitPicture = document.getElementById("submit-picture");
 
 btnPicture.onclick = function () {
   if (divPicture.classList.contains("is-visible")) {
     divPicture.classList.remove("is-visible");
+    submitPicture.classList.remove("is-visible");
   } else {
     divPicture.classList.add("is-visible");
+    submitPicture.classList.add("is-visible");
   }
 };
 

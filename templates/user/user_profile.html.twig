@@ -13,19 +13,21 @@
 	Profile picture
 </button>
 <div >
-	<form name='pp' id='profile-picture'>
-		{% for i in 0..icons|length -1 %}
+	<form name='pp' id='form-picture'>
+		<div id='profile-picture'>
+			{% for i in 0..icons|length -1 %}
 
-			{% for j in 0..icons[i]|length -1 %}
-				{% if  icons[i][0] is defined%}
-					<img class='picture' src="{{icons[i][j]}}"/>
-				{% else %}
-					{% set j2 = j+1 %}
-					<img class='picture' src="{{icons[i][j2]}}"/>
-				{% endif %}
+				{% for j in 0..icons[i]|length -1 %}
+					{% if  icons[i][0] is defined%}
+						<img class='picture' src="{{icons[i][j]}}"/>
+					{% else %}
+						{% set j2 = j+1 %}
+						<img class='picture' src="{{icons[i][j2]}}"/>
+					{% endif %}
+				{% endfor %}
 			{% endfor %}
-		{% endfor %}
-		<button type='submit'> Submit </button>
+		</div>
+		<button type='submit' id='submit-picture'> Submit </button>
 	</form>
 </div>
 {% block javascripts %}

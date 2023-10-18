@@ -29,6 +29,7 @@ class FgoApiController extends AbstractController
         $user = new Users();
         $registrationForm = $formFactory->createNamed('registration', UserRegistrationType::class, $user);
 
+        #region registration#
         $registrationForm->handleRequest($request);
         if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
             $userInfo = $registrationForm->getData(); //get form datas
@@ -63,16 +64,34 @@ class FgoApiController extends AbstractController
             }
         } else {
         }
+        #endregion registration#
 
+        #region connection#
         $connectionForm = $formFactory->createNamed('connection', UserConnectionType::class, $user);
 
         $connectionForm->handleRequest($request);
 
-        if($connectionForm->isSubmitted() && $connectionForm->isValid()){
+        if ($connectionForm->isSubmitted() && $connectionForm->isValid()) {
             $userConnection = $connectionForm->getData(); //get form datas
-            $connectedUser = $entityManager->getRepository(Users::class)->findUser($userConnection->getMail(), $userConnection->getPassword());
+            $connectedUser = $entityManager->getRepository(Users::class)->findUser($userConnection->getMail(), $userConnection->getPassword()); //find user by name and password
             $connectedUser = array_merge(...$connectedUser);
             $session->set('username', $connectedUser['username']); //Put it in a session for a later use
+            $session->set('profilePicture', $connectedUser['picture']); //Put it in a session for a later use
+
+            return $this->redirectToRoute('index');  //to "reset" form
+        }
+        #endregion connection#
+
+        if ($request->isXmlHttpRequest()) {
+            //log out
+            $val = $request->request->get('logOut');
+
+            if ($val == 1) {
+                $session->clear();
+               
+                return new JsonResponse($val);
+            }
+           
         }
 
         return $this->render(
@@ -80,7 +99,8 @@ class FgoApiController extends AbstractController
             [
                 'form_registration' => $registrationForm,
                 'form_connection' => $connectionForm,
-                'username' => $session->get('username')
+                'username' => $session->get('username'),
+                'picture' => urldecode(str_replace('url=', '', $session->get('profilePicture')))
             ]
 
         );

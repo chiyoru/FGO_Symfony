@@ -49,22 +49,11 @@ class UsersController extends AbstractController
             }
         }
 
-        $pp = 'vide';
         if ($request->isXmlHttpRequest()) {
             //update profile pic
             $user2 = $entityManager->getRepository(Users::class)->find($user['id']);
             $pp = $request->getContent();
-            // return $this->render(
-            //     'user/user_profile.html.twig',
-            //     [
-            //         'username' => $user['username'],
-            //         'password' => $user['password'],
-            //         'icons' => $result,
-            //         'pp' => $pp,
-            //         'debug' => true
-            //     ]
-            // );
-            // $session->set('pp', str_replace( 'url=', '', $pp));
+           
             $user2->setPicture($pp);
             $entityManager->flush();
 
@@ -81,10 +70,5 @@ class UsersController extends AbstractController
                 'debug' => true
             ]
         );
-
-        // $user->setPicture($pp);
-        // $entityManager->flush();
-
-
     }
 }
